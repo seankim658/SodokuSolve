@@ -42,37 +42,77 @@ class Board:
                         break
                     # if the user didn't try to exit, check if they entered a number
                     if not( tmp.isdigit() ):
-                        print( 'Enter a cell value form 1-9: ' )
+                        print( 'Enter a cell value form 0-9' )
                         continue 
                     # check if cell value from user is valid 
                     tmp = int( tmp )
-                    if tmp > 0 and tmp < 10:
+                    if tmp >= 0 and tmp < 10:
                         tempArray[i][j] = tmp
                         break
                     else:
-                        print( 'Enter a cell value from 1-9: ' )
+                        print( 'Enter a cell value from 0-9' )
         
         # board
         self.board = tempArray
+        if self.validateInitBoard() == False:
+            print( 'INVALID INITIAL BOARD CONFIGURATION' )
+            sys.exit( 1 )
     
-    # make sure the board entered by the user is a valid starting board configuration 
-    def validateBoard( self ):
-        print('nada')
+    # validate the entered initial board configuration 
+    def validateInitBoard( self ):
+        for i in range( len( self.board ) ):
+            for j in range( len( self.board[i] ) ):
+                if self.board[i][j] != 0:
+                    if self.valid( self.board[i][j], ( i, j ) ) == False:
+                        return False
+        return True
 
-    # add cell value to the board
+    # make sure the board entered by the user is a valid starting board configuration 
+    def valid( self, value, pos ):
+        # check indices 
+        if pos[0] < 0 or pos[0] > 9:
+            print( 'Row coordinate out of bounds' )
+            return False 
+        elif pos[1] < 0 or pos[1] > 9: 
+            print( 'Col coordinate out of bounds' )
+            return False
+        elif value < 0 or value > 9:
+            print( 'Enter a valid value' ) 
+            return False
+
+        # check row 
+        for i in range( len( self.board[0] ) ):
+            if self.board[pos[0]][i] == value:
+                return False
+        
+        # check column
+        for i in range( len( self.board ) ):
+            if self.board[i][pos[1]] == value:
+                return False
+
+        # check subsquare
+        box_X = pos[1] // 3
+        box_Y = pos[0] // 3
+        for i in range( box_Y * 3, box_Y * 3 + 3 ):
+            for j in range( box_X * 3, box_X * 3 + 3 ):
+                if self.board[i][j] == value:
+                    return False
+
+        # passed all validation tests, good to add
+        return True  
+
+    # find next empty square on the board
+    def findEmpty( self ):
+        for i in range( len( self.board ) ):
+            for j in range( len( self.board[i] ) ):
+                if self.board[i][j] == 0:
+                    return ( i, j )
+        return False
+
+    # add cell value to the board; returns True if the value was added and False if not
     def add( self, i, j, value ):
-        # check method parameters for validity 
-        if i < 1 or i > 9:
-            print( 'Add: i coordinate out of bounds' )
-        elif j < 1 or j > 9: 
-            print( 'Add: j coordinate out of bounds' )
-        elif not( value.isdigit() ) or value < 1 or value > 9:
-            print( 'Add: enter a valid value' )
-        # set value at coordinate 
+        # set value at coordinate if it is valid
         self.board[i][j] = value 
-        # validate that new value doesn't break the board 
-        if self.validateBoard() == False:
-            print( 'Add: Entered value: ' + value + ' at position (' + i + ', ' + j + ') breaks the board' )
     
     # prints the board in a pretty format w/subgrids 
     def printBoard( self ):
@@ -89,9 +129,3 @@ class Board:
                 else:
                     print( str(self.board[i][j] ) + ' ', end = '' )
         
-
-
-        
-        
-
-
