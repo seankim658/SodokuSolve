@@ -1,6 +1,18 @@
 import numpy as np
 import sys
 
+builtIn = [
+    [0, 0, 0, 2, 6, 0, 7, 0, 1],
+    [6, 8, 0, 0, 7, 0, 0, 9, 0],
+    [1, 9, 0, 0, 0, 4, 5, 0, 0],
+    [8, 2, 0, 1, 0, 0, 0, 4, 0],
+    [0, 0, 4, 6, 0, 2, 9, 0, 0],
+    [0, 5, 0, 0, 0, 3, 0, 2, 8],
+    [0, 0, 9, 3, 0, 0, 0, 7, 4],
+    [0, 4, 0, 0, 5, 0, 0, 3, 6],
+    [7, 0, 3, 0, 1, 8, 0, 0, 0],
+]
+
 class Board: 
     
     # constructor 
@@ -17,8 +29,9 @@ class Board:
         n = 9
         tempArray = [[0 for k in range( n )] for j in range( n )]
         
-        # flag for finishing user input
+        # flag for finishing user input and using built in board
         done = False
+        useBuiltIn = False
 
         # prompt user to enter in each cell value for the table 
         for i in range( len( tempArray ) ):
@@ -40,6 +53,10 @@ class Board:
                     elif tmp == "Done" or tmp == "done":
                         done = True 
                         break
+                    elif tmp == 'built in':
+                        done = True
+                        useBuiltIn = True
+                        break
                     # if the user didn't try to exit, check if they entered a number
                     if not( tmp.isdigit() ):
                         print( 'Enter a cell value form 0-9' )
@@ -53,9 +70,13 @@ class Board:
                         print( 'Enter a cell value from 0-9' )
         
         # board
-        self.board = tempArray
+        if useBuiltIn == True:
+            self.board = builtIn
+        else:
+            self.board = tempArray
         if self.validateInitBoard() == False:
             print( 'INVALID INITIAL BOARD CONFIGURATION' )
+            self.printBoard()
             sys.exit( 1 )
     
     # validate the entered initial board configuration 
@@ -82,12 +103,12 @@ class Board:
 
         # check row 
         for i in range( len( self.board[0] ) ):
-            if self.board[pos[0]][i] == value:
+            if self.board[pos[0]][i] == value and pos[1] != i:
                 return False
         
         # check column
         for i in range( len( self.board ) ):
-            if self.board[i][pos[1]] == value:
+            if self.board[i][pos[1]] == value and pos[0] != i:
                 return False
 
         # check subsquare
@@ -95,7 +116,7 @@ class Board:
         box_Y = pos[0] // 3
         for i in range( box_Y * 3, box_Y * 3 + 3 ):
             for j in range( box_X * 3, box_X * 3 + 3 ):
-                if self.board[i][j] == value:
+                if self.board[i][j] == value and ( i, j ) != pos:
                     return False
 
         # passed all validation tests, good to add

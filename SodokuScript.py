@@ -6,7 +6,7 @@ from Board import Board
 def solve( board ):
     # find first empty square
     find = board.findEmpty()
-    print( find ) 
+    # print( find ) 
     # if no empty squres, done
     if not find:
         return True
