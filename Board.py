@@ -16,13 +16,6 @@ class Board:
         # create temporary 2D python array of user input 
         n = 9
         tempArray = [[0 for k in range( n )] for j in range( n )]
-
-        # print tempArray    
-        """    
-        for i in range( len( tempArray) ):
-            for j in range( len( tempArray[i] ) ):
-                print( '(' + str( i ) + ', ' + str(j) + ')' + str(tempArray[i][j] ) )
-        """
         
         # flag for finishing user input
         done = False
@@ -81,10 +74,21 @@ class Board:
         if self.validateBoard() == False:
             print( 'Add: Entered value: ' + value + ' at position (' + i + ', ' + j + ') breaks the board' )
     
-    # prints the board in a pretty format
+    # prints the board in a pretty format w/subgrids 
     def printBoard( self ):
-        printB = np.array( self.board )
-        print( printB )
+         # print board        
+        print( 'BOARD: ')
+        for i in range( len( self.board) ):
+            if i % 3 == 0 and i != 0:
+                print( '------------------------')
+            for j in range( len( self.board[i] ) ):
+                if j % 3 == 0 and j != 0:
+                    print( ' | ', end = '' ) 
+                if j == 8:
+                    print( self.board[i][j] )
+                else:
+                    print( str(self.board[i][j] ) + ' ', end = '' )
+        
 
 
         
