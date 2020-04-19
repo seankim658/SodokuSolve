@@ -1,1 +1,3 @@
 # SodokuSolve
+
+Solves Sodoku Puzzles
