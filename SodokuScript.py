@@ -26,6 +26,7 @@ def solve( board ):
 def main():
     # have user enter in the initial board configuration
     board = Board() 
+    print( 'INITIAL BOARD:')
     board.printBoard()
     if solve( board ) == True:
         print( '------------------------------------------------------------------------------------------------------------------')
