@@ -2,7 +2,6 @@ import numpy as np
 import sys
 from Board import Board 
 
-
 def solve( board ):
     # find first empty square
     find = board.findEmpty()
